@@ -31,10 +31,9 @@ void loop(){
   //ボールのあるベクトルのデータ送るところ
   //x、yは元々-127~127だったものに127を足して0~254の値にしてあり、受信側で元のデータに戻してあります。
   Serial.write(254);
-  delayMicroseconds(10);
   Serial.write(x);
-  delayMicroseconds(10);
   Serial.write(y);
+  
   delayMicroseconds(500);
 }
 
