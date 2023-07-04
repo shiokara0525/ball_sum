@@ -8,8 +8,9 @@ int ball_num[16];
 uint8_t ball_8bit[16];
 double Sin[16];
 double Cos[16];
-int x,y;
+int16_t x,y;
 timer Timer_ball;
+timer Timer;
 void ball();
 AC ac;
 //デジタル12番
@@ -28,13 +29,20 @@ void setup() {
 
 void loop(){
   ball();
-  //ボールのあるベクトルのデータ送るところ
-  //x、yは元々-127~127だったものに127を足して0~254の値にしてあり、受信側で元のデータに戻してあります。
-  Serial.write(254);
-  Serial.write(x);
-  Serial.write(y);
-  
-  delayMicroseconds(500);
+  int sendBuf_int[3];
+  byte sendBuf_byte[6];
+  //データを格納
+  sendBuf_int[1] = x;
+  sendBuf_int[2] = y;
+  //データをバイトに直す
+  sendBuf_byte[0] = 0xFF;
+  sendBuf_byte[1] = byte( sendBuf_int[1] >> 8 ); //ビットシフトで上位側の８Bitを取り出し、バイト型に型変換をする。
+  sendBuf_byte[2] = byte( sendBuf_int[1] & 0xFF ); //論理和で下位側の８Bitを取り出し、バイト型に型変換をする。
+  sendBuf_byte[3] = byte( sendBuf_int[2] >> 8 ); //ビットシフトで上位側の８Bitを取り出し、バイト型に型変換をする。
+  sendBuf_byte[4] = byte( sendBuf_int[2] & 0xFF ); //論理和で下位側の８Bitを取り出し、バイト型に型変換をする。
+  sendBuf_byte[5] = 0xAA;
+  //６バイトのデータ送信
+  Serial.write(sendBuf_byte,6);
 }
 
 
@@ -92,21 +100,17 @@ void ball() {
     ball_x += ball_num[num] * Cos[num];
     ball_y += ball_num[num] * Sin[num];
   }
+  x = ball_x;
+  y = ball_y;
 
-  ball_x *= 0.05;
-  ball_y *= 0.05;
-  if(127 < abs(ball_x)){  //データが127を超えたら127にする
-    ball_x = (ball_x < 0 ? -127 : 127);
-  }
-  if(127 < abs(ball_y)){
-    ball_y = (ball_y < 0 ? -127 : 127);
-  }
-  x = ball_x + 127;  //UARTで送るためにデータを正にする
-  y = ball_y + 127;  ////UARTで送るためにデータを正にする
+  // ball_x *= 0.05;
+  // ball_y *= 0.05;
+  // if(127 < abs(ball_x)){  //データが127を超えたら127にする
+  //   ball_x = (ball_x < 0 ? -127 : 127);
+  // }
+  // if(127 < abs(ball_y)){
+  //   ball_y = (ball_y < 0 ? -127 : 127);
+  // }
+  // x = ball_x + 127;  //UARTで送るためにデータを正にする
+  // y = ball_y + 127;  ////UARTで送るためにデータを正にする
 }
-
-
-
-// void serialEvent(){
-//   Serial.write(38);
-// }
