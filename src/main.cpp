@@ -16,7 +16,7 @@ AC ac;
 //デジタル12番
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(57600);
   ac.setup();
   for(int i = 0; i < 16; i++){
     Sin[i] = sin(radians(22.5 * i));
@@ -43,6 +43,7 @@ void loop(){
   sendBuf_byte[5] = 0xAA;
   //６バイトのデータ送信
   Serial.write(sendBuf_byte,6);
+  delayMicroseconds(500);
 }
 
 
@@ -94,7 +95,7 @@ void ball() {
     if(num < 0){
       num += 16;
     }
-    else if(16 < num){
+    else if(15 < num){
       num -= 16;
     }
     ball_x += ball_num[num] * Cos[num];
@@ -102,8 +103,9 @@ void ball() {
   }
   x = ball_x;
   y = ball_y;
+  
 
-  // ball_x *= 0.05;
+  // ball_x *= 0.05; 
   // ball_y *= 0.05;
   // if(127 < abs(ball_x)){  //データが127を超えたら127にする
   //   ball_x = (ball_x < 0 ? -127 : 127);
