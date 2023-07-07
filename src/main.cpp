@@ -12,11 +12,12 @@ int16_t x,y;
 timer Timer_ball;
 timer Timer;
 void ball();
+void ball_print();
 AC ac;
 //デジタル12番
 
 void setup() {
-  Serial.begin(57600);
+  Serial.begin(9600);
   ac.setup();
   for(int i = 0; i < 16; i++){
     Sin[i] = sin(radians(22.5 * i));
@@ -43,9 +44,19 @@ void loop(){
   sendBuf_byte[5] = 0xAA;
   //６バイトのデータ送信
   Serial.write(sendBuf_byte,6);
+  // ball_print();
   delayMicroseconds(500);
 }
 
+void ball_print(){
+  Serial.print(" x : ");
+  Serial.print(x);
+  Serial.print(" y : ");
+  Serial.print(y);
+  Serial.print(" ang : ");
+  Serial.print(degrees(atan2(y,x)));
+  Serial.println();
+}
 
 void ball() {
   double ball_x = 0;
@@ -84,6 +95,9 @@ void ball() {
   }
 
   for(int i = 0; i < 16; i++){
+    if(ball_num[i] == 1000){
+      ball_num[i] = 250;
+    }
     if(best_val < ball_num[i]){
       best_val = ball_num[i];
       best_num = i;
@@ -92,6 +106,10 @@ void ball() {
 
   for(int i = -2; i <= 2; i++){
     int num = best_num + i;
+    // Serial.print(num);
+    // Serial.print(" : ");
+    // Serial.print(ball_num[num]);
+    // Serial.print(" ");
     if(num < 0){
       num += 16;
     }
