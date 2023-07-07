@@ -17,7 +17,7 @@ AC ac;
 //デジタル12番
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(57600);
   ac.setup();
   for(int i = 0; i < 16; i++){
     Sin[i] = sin(radians(22.5 * i));
