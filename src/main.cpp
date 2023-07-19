@@ -106,31 +106,18 @@ void ball() {
 
   for(int i = -2; i <= 2; i++){
     int num = best_num + i;
-    // Serial.print(num);
-    // Serial.print(" : ");
-    // Serial.print(ball_num[num]);
-    // Serial.print(" ");
     if(num < 0){
       num += 16;
     }
     else if(15 < num){
       num -= 16;
     }
+    if(ball_num[num] == 250){
+      ball_num[num] = 1000;
+    }
     ball_x += ball_num[num] * Cos[num];
     ball_y += ball_num[num] * Sin[num];
   }
   x = ball_x;
   y = ball_y;
-  
-
-  // ball_x *= 0.05; 
-  // ball_y *= 0.05;
-  // if(127 < abs(ball_x)){  //データが127を超えたら127にする
-  //   ball_x = (ball_x < 0 ? -127 : 127);
-  // }
-  // if(127 < abs(ball_y)){
-  //   ball_y = (ball_y < 0 ? -127 : 127);
-  // }
-  // x = ball_x + 127;  //UARTで送るためにデータを正にする
-  // y = ball_y + 127;  ////UARTで送るためにデータを正にする
 }
