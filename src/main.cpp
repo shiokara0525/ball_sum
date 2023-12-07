@@ -12,10 +12,13 @@ timer Timer_ball;
 timer Timer;
 void ball();
 void ball_print();
+void led();
+int LED = 13;
 //デジタル12番
 
 void setup() {
   Serial.begin(57600);
+  pinMode(LED,OUTPUT);
   for(int i = 0; i < 16; i++){
     Sin[i] = sin(radians(22.5 * i));
     Cos[i] = cos(radians(22.5 * i));
@@ -39,10 +42,11 @@ void loop(){
   sendBuf_byte[3] = byte( sendBuf_int[2] >> 8 ); //ビットシフトで上位側の８Bitを取り出し、バイト型に型変換をする。
   sendBuf_byte[4] = byte( sendBuf_int[2] & 0xFF ); //論理和で下位側の８Bitを取り出し、バイト型に型変換をする。
   sendBuf_byte[5] = 0xAA;
-  //６バイトのデータ送信
-  //ball_print();
+  // ６バイトのデータ送信
+  // ball_print();
   Serial.write(sendBuf_byte,6);
-  delayMicroseconds(500);
+  // Serial.write(10);
+  // led();
 }
 
 void ball_print(){
@@ -115,6 +119,14 @@ void ball() {
     ball_x += ball_num[num] * Cos[num];
     ball_y += ball_num[num] * Sin[num];
   }
-  x = ball_x;
-  y = ball_y;
+  x = -ball_x;
+  y = -ball_y;
+}
+
+
+void led(){
+  digitalWrite(LED,HIGH);
+  delay(500);
+  digitalWrite(LED,LOW);
+  delay(500);
 }
