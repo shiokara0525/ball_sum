@@ -4,7 +4,9 @@
 int ballPin[16] = {10,2,14,15,16,17,18,19,11,3,4,5,6,7,8,9};
 double ang;
 int ball_num[16];
+int ball_g[2];
 uint8_t ball_8bit[16];
+uint8_t ball_get_8[2];
 double Sin[16];
 double Cos[16];
 int16_t x,y;
@@ -18,7 +20,6 @@ int LED = 13;
 
 void setup() {
   Serial.begin(57600);
-  pinMode(LED,OUTPUT);
   for(int i = 0; i < 16; i++){
     Sin[i] = sin(radians(22.5 * i));
     Cos[i] = cos(radians(22.5 * i));
@@ -62,6 +63,8 @@ void ball_print(){
 void ball() {
   double ball_x = 0;
   double ball_y = 0;
+  ball_g[0] = 0;
+  ball_g[1] = 0;
   for(int i = 0; i < 16; i++){
     ball_num[i] = 0;
   }
@@ -88,10 +91,19 @@ void ball() {
     ball_8bit[14] = PINB & _BV(0);
     ball_8bit[15] = PINB & _BV(1);
 
+    ball_get_8[0] = PINB & _BV(5);
+    ball_get_8[1] = PINB & _BV(4);
+
     for(int i = 0; i < 16; i++){
       if(ball_8bit[i] == 0){
         ball_num[i]++;
       }
+    }
+    if(ball_get_8[0] == 0){
+      ball_g[0]++;
+    }
+    if(ball_get_8[1] == 0){
+      ball_g[1]++;
     }
   }
 
