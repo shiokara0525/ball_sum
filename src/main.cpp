@@ -10,6 +10,7 @@ uint8_t ball_get_8[2];
 double Sin[16];
 double Cos[16];
 int16_t x,y;
+int ball_get;
 timer Timer_ball;
 timer Timer;
 void ball();
@@ -57,6 +58,8 @@ void ball_print(){
   Serial.print(y);
   Serial.print(" ang : ");
   Serial.print(degrees(atan2(y,x)));
+  Serial.print(" get : ");
+  Serial.print(ball_get);
   Serial.println();
 }
 
@@ -130,6 +133,13 @@ void ball() {
     }
     ball_x += ball_num[num] * Cos[num];
     ball_y += ball_num[num] * Sin[num];
+  }
+
+  if(400 < ball_g[0] && 400 < ball_g[1]){
+    ball_get = 1;
+  }
+  else{
+    ball_get = 0;
   }
   x = -ball_x;
   y = -ball_y;
