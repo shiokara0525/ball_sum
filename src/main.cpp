@@ -28,6 +28,7 @@ void setup() {
   DDRB &= ~(_BV(0) | _BV(1) | _BV(2) | _BV(3));
   DDRC &= ~(_BV(1) | _BV(1) | _BV(2) | _BV(3) | _BV(4) | _BV(5));
   DDRD &= ~(_BV(2) | _BV(3) | _BV(4) | _BV(5) | _BV(6) | _BV(7));
+  pinMode(LED,OUTPUT);
 }
 
 void loop(){
@@ -43,10 +44,11 @@ void loop(){
   sendBuf_byte[2] = byte( sendBuf_int[1] & 0xFF ); //論理和で下位側の８Bitを取り出し、バイト型に型変換をする。
   sendBuf_byte[3] = byte( sendBuf_int[2] >> 8 ); //ビットシフトで上位側の８Bitを取り出し、バイト型に型変換をする。
   sendBuf_byte[4] = byte( sendBuf_int[2] & 0xFF ); //論理和で下位側の８Bitを取り出し、バイト型に型変換をする。
-  sendBuf_byte[5] = 0xAA;
+  sendBuf_byte[5] = ball_get;
+  sendBuf_byte[6] = 0xAA;
   // ６バイトのデータ送信
   // ball_print();
-  Serial.write(sendBuf_byte,6);
+  Serial.write(sendBuf_byte,7);
   // Serial.write(10);
   // led();
 }
@@ -135,12 +137,18 @@ void ball() {
     ball_y += ball_num[num] * Sin[num];
   }
 
-  if(400 < ball_g[0] && 400 < ball_g[1]){
+
+  if(600 < ball_g[0] && 630 < ball_g[1]){
     ball_get = 1;
   }
   else{
     ball_get = 0;
   }
+
+  // Serial.print(" ");
+  // Serial.print(ball_g[0]);
+  // Serial.print(" ");
+  // Serial.print(ball_g[1]);
   x = -ball_x;
   y = -ball_y;
 }
