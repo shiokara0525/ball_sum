@@ -28,7 +28,6 @@ void setup() {
   DDRB &= ~(_BV(0) | _BV(1) | _BV(2) | _BV(3));
   DDRC &= ~(_BV(1) | _BV(1) | _BV(2) | _BV(3) | _BV(4) | _BV(5));
   DDRD &= ~(_BV(2) | _BV(3) | _BV(4) | _BV(5) | _BV(6) | _BV(7));
-  pinMode(LED,OUTPUT);
 }
 
 void loop(){
@@ -145,10 +144,10 @@ void ball() {
     ball_get = 0;
   }
 
-  // Serial.print(" ");
+  // Serial.print(" 0 : ");
   // Serial.print(ball_g[0]);
-  // Serial.print(" ");
-  // Serial.print(ball_g[1]);
+  // Serial.print(" 1 : ");
+  // Serial.println(ball_g[1]);
   x = -ball_x;
   y = -ball_y;
 }
