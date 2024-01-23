@@ -137,7 +137,7 @@ void ball() {
   }
 
 
-  if(600 < ball_g[0] && 630 < ball_g[1]){
+  if(480 < ball_g[0] && 600 < ball_g[1]){
     ball_get = 1;
   }
   else{
@@ -147,7 +147,7 @@ void ball() {
   // Serial.print(" 0 : ");
   // Serial.print(ball_g[0]);
   // Serial.print(" 1 : ");
-  // Serial.println(ball_g[1]);
+  // Serial.print(ball_g[1]);
   x = -ball_x;
   y = -ball_y;
 }
