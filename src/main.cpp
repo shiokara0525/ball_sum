@@ -137,7 +137,7 @@ void ball() {
   }
 
 
-  if(600 < ball_g[0] && 600 < ball_g[1]){
+  if(600 < ball_g[0] && 600 < ball_g[1] || 1175 < ball_g[0]+ball_g[1]){
     ball_get = 1;
   }
   else if(1100 < ball_g[0] + ball_g[1]){
@@ -151,6 +151,8 @@ void ball() {
   // Serial.print(ball_g[0]);
   // Serial.print(" 1 : ");
   // Serial.print(ball_g[1]);
+  // Serial.print(" + : ");
+  // Serial.print(ball_g[0]+ball_g[1]);
   x = -ball_x;
   y = -ball_y;
 }
