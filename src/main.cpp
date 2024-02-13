@@ -13,14 +13,16 @@ int16_t x,y;
 int ball_get;
 timer Timer_ball;
 timer Timer;
+int count;
 void ball();
 void ball_print();
 void led();
 int LED = 13;
+int T[2];
 //デジタル12番
 
 void setup() {
-  Serial.begin(57600);
+  Serial.begin(9600);
   for(int i = 0; i < 16; i++){
     Sin[i] = sin(radians(22.5 * i));
     Cos[i] = cos(radians(22.5 * i));
@@ -31,6 +33,7 @@ void setup() {
 }
 
 void loop(){
+  Timer.reset();
   ball();
   int sendBuf_int[3];
   byte sendBuf_byte[6];
@@ -46,9 +49,10 @@ void loop(){
   sendBuf_byte[5] = ball_get;
   sendBuf_byte[6] = 0xAA;
   // ６バイトのデータ送信
-  // ball_print();
-  Serial.write(sendBuf_byte,7);
+  // Serial.write(sendBuf_byte,7);
   // Serial.write(10);
+  T[1] = Timer.read_ms();
+  ball_print();
   // led();
 }
 
@@ -61,12 +65,20 @@ void ball_print(){
   Serial.print(degrees(atan2(y,x)));
   Serial.print(" get : ");
   Serial.print(ball_get);
+  Serial.print(" 0 : ");
+  Serial.print(T[0]);
+  Serial.print(" 1 : ");
+  Serial.print(T[1]);
+  Serial.print(" count : ");
+  Serial.print(count);
   Serial.println();
 }
 
 void ball() {
   double ball_x = 0;
   double ball_y = 0;
+  count = 0;
+  float ball_val[18];
   ball_g[0] = 0;
   ball_g[1] = 0;
   for(int i = 0; i < 16; i++){
@@ -77,7 +89,8 @@ void ball() {
 
   Timer_ball.reset();
 
-  for(int i = 0; i < 1000; i++){
+  while(Timer_ball.read_us() < 833){
+    count++;
     ball_8bit[0] = PINB & _BV(2);
     ball_8bit[1] = PIND & _BV(2);
     ball_8bit[2] = PINC & _BV(0);
@@ -110,6 +123,8 @@ void ball() {
       ball_g[1]++;
     }
   }
+
+  T[0] = Timer.read_ms();
 
   for(int i = 0; i < 16; i++){
     if(ball_num[i] == 1000){
