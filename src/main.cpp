@@ -19,8 +19,16 @@ void led();
 int LED = 13;
 //デジタル12番
 
+
+int Serial_flag = 1;  //1だったらメインにシリアル、0だったらパソコンに表示
+
 void setup() {
-  Serial.begin(57600);
+  if(Serial_flag == 1){
+    Serial.begin(57600);
+  }
+  else if(Serial_flag == 0){
+    Serial.begin(9600);
+  }
   for(int i = 0; i < 16; i++){
     Sin[i] = sin(radians(22.5 * i));
     Cos[i] = cos(radians(22.5 * i));
@@ -46,10 +54,13 @@ void loop(){
   sendBuf_byte[5] = ball_get;
   sendBuf_byte[6] = 0xAA;
   // ６バイトのデータ送信
-  // ball_print();
+  if(Serial_flag == 1){
+    Serial.write(sendBuf_byte,7);
+  }
+  else if(Serial_flag == 0){
+    ball_print();
+  }
   Serial.write(sendBuf_byte,7);
-  // Serial.write(10);
-  // led();
 }
 
 void ball_print(){
