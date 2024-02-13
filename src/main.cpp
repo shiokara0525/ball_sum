@@ -20,9 +20,15 @@ void led();
 int LED = 13;
 int T[2];
 //デジタル12番
+int Serial_flag = 0;  //1だったらメインにシリアル、0だったらパソコンに表示
 
 void setup() {
-  Serial.begin(9600);
+  if(Serial_flag == 1){
+    Serial.begin(57600);
+  }
+  else if(Serial_flag == 0){
+    Serial.begin(9600);
+  }
   for(int i = 0; i < 16; i++){
     Sin[i] = sin(radians(22.5 * i));
     Cos[i] = cos(radians(22.5 * i));
@@ -49,11 +55,12 @@ void loop(){
   sendBuf_byte[5] = ball_get;
   sendBuf_byte[6] = 0xAA;
   // ６バイトのデータ送信
-  // Serial.write(sendBuf_byte,7);
-  // Serial.write(10);
-  T[1] = Timer.read_ms();
-  ball_print();
-  // led();
+  if(Serial_flag == 1){
+    Serial.write(sendBuf_byte,7);
+  }
+  else if(Serial_flag == 0){
+    ball_print();
+  }
 }
 
 void ball_print(){
@@ -65,10 +72,10 @@ void ball_print(){
   Serial.print(degrees(atan2(y,x)));
   Serial.print(" get : ");
   Serial.print(ball_get);
-  Serial.print(" 0 : ");
-  Serial.print(T[0]);
-  Serial.print(" 1 : ");
-  Serial.print(T[1]);
+  // Serial.print(" 0 : ");
+  // Serial.print(T[0]);
+  // Serial.print(" 1 : ");
+  // Serial.print(T[1]);
   Serial.print(" count : ");
   Serial.print(count);
   Serial.println();
@@ -78,7 +85,6 @@ void ball() {
   double ball_x = 0;
   double ball_y = 0;
   count = 0;
-  float ball_val[18];
   ball_g[0] = 0;
   ball_g[1] = 0;
   for(int i = 0; i < 16; i++){
