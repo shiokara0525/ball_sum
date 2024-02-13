@@ -20,7 +20,7 @@ void led();
 int LED = 13;
 int T[2];
 //デジタル12番
-int Serial_flag = 0;  //1だったらメインにシリアル、0だったらパソコンに表示
+int Serial_flag = 1;  //1だったらメインにシリアル、0だったらパソコンに表示
 
 void setup() {
   if(Serial_flag == 1){
