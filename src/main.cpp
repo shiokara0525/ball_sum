@@ -17,10 +17,11 @@ void ball();
 void ball_print();
 void led();
 int LED = 13;
+int Serial_flag = 0; //0だったらメインに通信　1だったらデバッグ
 //デジタル12番
 
 void setup() {
-  Serial.begin(57600);
+  Serial.begin(115200);
   for(int i = 0; i < 16; i++){
     Sin[i] = sin(radians(22.5 * i));
     Cos[i] = cos(radians(22.5 * i));
@@ -46,10 +47,9 @@ void loop(){
   sendBuf_byte[5] = ball_get;
   sendBuf_byte[6] = 0xAA;
   // ６バイトのデータ送信
+  delayMicroseconds(1000);
   // ball_print();
-  Serial.write(sendBuf_byte,7);
-  // Serial.write(10);
-  // led();
+  Serial.write(sendBuf_byte, 7);
 }
 
 void ball_print(){
@@ -77,7 +77,7 @@ void ball() {
 
   Timer_ball.reset();
 
-  while(Timer_ball.read_us() < 833){
+  for(int i = 0; i < 100; i++){
     ball_8bit[0] = PINB & _BV(2);
     ball_8bit[1] = PIND & _BV(2);
     ball_8bit[2] = PINC & _BV(0);
@@ -112,8 +112,8 @@ void ball() {
   }
 
   for(int i = 0; i < 16; i++){
-    if(ball_num[i] == 1000){
-      ball_num[i] = 250;
+    if(ball_num[i] == 100){
+      ball_num[i] = 20;
     }
     if(best_val < ball_num[i]){
       best_val = ball_num[i];
@@ -137,16 +137,20 @@ void ball() {
   }
 
 
-  if(1100 < ball_g[0]+ball_g[1]){
+  if(110 < ball_g[0]+ball_g[1]){
     ball_get = 1;
   }
-  else if(1050 < ball_g[0] + ball_g[1]){
+  else if(105 < ball_g[0] + ball_g[1]){
     ball_get = 2;
   }
   else{
     ball_get = 0;
   }
 
+  // for(int i = 0; i < 16; i++){
+  //   Serial.print(" ");
+  //   Serial.print(ball_num[i]);
+  // }
   // Serial.print(" 0 : ");
   // Serial.print(ball_g[0]);
   // Serial.print(" 1 : ");
