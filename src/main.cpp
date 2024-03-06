@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include<timer.h>
+#include<MA.h>
 
 int ballPin[16] = {10,2,14,15,16,17,18,19,11,3,4,5,6,7,8,9};
 double ang;
@@ -13,6 +14,8 @@ int16_t x,y;
 int ball_get;
 timer Timer_ball;
 timer Timer;
+MA ma;
+int A;
 void ball();
 void ball_print();
 void led();
@@ -22,6 +25,7 @@ int Serial_flag = 0; //0だったらメインに通信　1だったらデバッ�
 
 void setup() {
   Serial.begin(115200);
+  ma.setLenth(10);
   for(int i = 0; i < 16; i++){
     Sin[i] = sin(radians(22.5 * i));
     Cos[i] = cos(radians(22.5 * i));
@@ -44,7 +48,7 @@ void loop(){
   sendBuf_byte[2] = byte( sendBuf_int[1] & 0xFF ); //論理和で下位側の８Bitを取り出し、バイト型に型変換をする。
   sendBuf_byte[3] = byte( sendBuf_int[2] >> 8 ); //ビットシフトで上位側の８Bitを取り出し、バイト型に型変換をする。
   sendBuf_byte[4] = byte( sendBuf_int[2] & 0xFF ); //論理和で下位側の８Bitを取り出し、バイト型に型変換をする。
-  sendBuf_byte[5] = ball_get;
+  sendBuf_byte[5] = A;
   sendBuf_byte[6] = 0xAA;
   // ６バイトのデータ送信
   delayMicroseconds(1000);
@@ -53,12 +57,12 @@ void loop(){
 }
 
 void ball_print(){
-  Serial.print(" x : ");
-  Serial.print(x);
-  Serial.print(" y : ");
-  Serial.print(y);
-  Serial.print(" ang : ");
-  Serial.print(degrees(atan2(y,x)));
+  // Serial.print(" x : ");
+  // Serial.print(x);
+  // Serial.print(" y : ");
+  // Serial.print(y);
+  // Serial.print(" ang : ");
+  // Serial.print(degrees(atan2(y,x)));
   Serial.print(" get : ");
   Serial.print(ball_get);
   Serial.println();
@@ -136,11 +140,11 @@ void ball() {
     ball_y += ball_num[num] * Sin[num];
   }
 
-
-  if(110 < ball_g[0]+ball_g[1]){
+  A = ma.demandAve(ball_g[0] + ball_g[1]);
+  if(110 < A){
     ball_get = 1;
   }
-  else if(105 < ball_g[0] + ball_g[1]){
+  else if(105 < A){
     ball_get = 2;
   }
   else{
@@ -155,8 +159,8 @@ void ball() {
   // Serial.print(ball_g[0]);
   // Serial.print(" 1 : ");
   // Serial.print(ball_g[1]);
-  // Serial.print(" + : ");
-  // Serial.print(ball_g[0]+ball_g[1]);
+  // Serial.print(" A : ");
+  // Serial.print(A);
   x = -ball_x;
   y = -ball_y;
 }
