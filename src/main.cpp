@@ -51,7 +51,7 @@ void loop(){
   sendBuf_byte[5] = A;
   sendBuf_byte[6] = 0xAA;
   // ６バイトのデータ送信
-  delayMicroseconds(1000);
+  // delayMicroseconds(1000);
   // ball_print();
   Serial.write(sendBuf_byte, 7);
 }
@@ -141,10 +141,10 @@ void ball() {
   }
 
   A = ma.demandAve(ball_g[0] + ball_g[1]);
-  if(110 < A){
+  if(70 < A){
     ball_get = 1;
   }
-  else if(105 < A){
+  else if(60 < A){
     ball_get = 2;
   }
   else{
