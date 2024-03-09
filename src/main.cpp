@@ -125,7 +125,7 @@ void ball() {
     }
   }
 
-  for(int i = -2; i <= 2; i++){
+  for(int i = -4; i <= 4; i++){
     int num = best_num + i;
     if(num < 0){
       num += 16;
