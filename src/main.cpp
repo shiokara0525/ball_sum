@@ -14,6 +14,7 @@ int16_t x,y;
 int ball_get;
 timer Timer_ball;
 timer Timer;
+int Time;
 MA ma;
 int A;
 void ball();
@@ -57,15 +58,29 @@ void loop(){
 }
 
 void ball_print(){
+  Time = Timer.read_ms();
   // Serial.print(" x : ");
   // Serial.print(x);
   // Serial.print(" y : ");
   // Serial.print(y);
-  // Serial.print(" ang : ");
-  // Serial.print(degrees(atan2(y,x)));
+  Serial.print(" time : ");
+  Serial.print(Time);
+  Serial.print(" ang : ");
+  Serial.print(degrees(atan2(y,x)));
+  Serial.print(" 0 : ");
+  Serial.print(ball_g[0]);
+  Serial.print(" 1 : ");
+  Serial.print(ball_g[1]);
+  Serial.print(" A : ");
+  Serial.print(A);
   Serial.print(" get : ");
   Serial.print(ball_get);
+  // for(int i = 0; i < 16; i++){
+  //   Serial.print(" ");
+  //   Serial.print(ball_num[i]);
+  // }
   Serial.println();
+  Timer.reset();
 }
 
 void ball() {
@@ -150,17 +165,6 @@ void ball() {
   else{
     ball_get = 0;
   }
-
-  // for(int i = 0; i < 16; i++){
-  //   Serial.print(" ");
-  //   Serial.print(ball_num[i]);
-  // }
-  // Serial.print(" 0 : ");
-  // Serial.print(ball_g[0]);
-  // Serial.print(" 1 : ");
-  // Serial.print(ball_g[1]);
-  // Serial.print(" A : ");
-  // Serial.print(A);
   x = -ball_x;
   y = -ball_y;
 }
