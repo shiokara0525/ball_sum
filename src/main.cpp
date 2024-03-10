@@ -155,7 +155,8 @@ void ball() {
     ball_y += ball_num[num] * Sin[num];
   }
 
-  A = ma.demandAve(ball_g[0] + ball_g[1]);
+  // A = ma.demandAve(ball_g[0] + ball_g[1]);
+  A = ball_g[0] + ball_g[1];
   if(70 < A){
     ball_get = 1;
   }
