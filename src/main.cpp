@@ -39,7 +39,7 @@ void setup() {
 void loop(){
   ball();
   int sendBuf_int[3];
-  byte sendBuf_byte[6];
+  byte sendBuf_byte[7];
   //データを格納
   sendBuf_int[1] = x;
   sendBuf_int[2] = y;
@@ -49,12 +49,13 @@ void loop(){
   sendBuf_byte[2] = byte( sendBuf_int[1] & 0xFF ); //論理和で下位側の８Bitを取り出し、バイト型に型変換をする。
   sendBuf_byte[3] = byte( sendBuf_int[2] >> 8 ); //ビットシフトで上位側の８Bitを取り出し、バイト型に型変換をする。
   sendBuf_byte[4] = byte( sendBuf_int[2] & 0xFF ); //論理和で下位側の８Bitを取り出し、バイト型に型変換をする。
-  sendBuf_byte[5] = A;
-  sendBuf_byte[6] = 0xAA;
+  sendBuf_byte[5] = ball_g[0];
+  sendBuf_byte[6] = ball_g[1];
+  sendBuf_byte[7] = 0xAA;
   // ６バイトのデータ送信
   // delayMicroseconds(1000);
   // ball_print();
-  Serial.write(sendBuf_byte, 7);
+  Serial.write(sendBuf_byte, 8);
 }
 
 void ball_print(){
